@@ -13,218 +13,226 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final isSmallScreen = screenWidth < 600;
-    final horizontalPadding = isSmallScreen ? 18.0 : 22.0;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // Responsive design tokens (8dp grid + clamping)
+    final padX = (screenWidth * 0.06).clamp(20.0, 28.0);
+    final padTopBottom = (screenHeight * 0.04).clamp(16.0, 24.0);
+    final spaceLogoBelow = (screenHeight * 0.04).clamp(24.0, 48.0);
+    final spaceIllustration = (screenHeight * 0.06).clamp(32.0, 56.0);
+    final spaceHeadline = (screenHeight * 0.03).clamp(16.0, 24.0);
+    final spaceToCTA = (screenHeight * 0.06).clamp(32.0, 64.0);
+    final btnHeight = (screenHeight * 0.065).clamp(48.0, 56.0);
+    final btnRadius = (screenWidth * 0.04).clamp(14.0, 18.0);
+
+    // Typography sizes
+    final logoFontSize = (screenWidth * 0.07).clamp(26.0, 34.0);
+    final h1FontSize = (screenWidth * 0.062).clamp(24.0, 32.0);
+    final h2FontSize = (screenWidth * 0.048).clamp(18.0, 24.0);
+    final bodyFontSize = (screenWidth * 0.038).clamp(14.0, 16.0);
+    final btnFontSize = (screenWidth * 0.04).clamp(15.0, 17.0);
+
+    // Illustration sizing
+    final illustrationWidth = screenWidth * 0.82;
+    final illustrationHeight = (screenHeight * 0.38).clamp(220.0, 320.0);
+    final illustrationRadius = (screenWidth * 0.06).clamp(20.0, 32.0);
 
     return Scaffold(
       body: Stack(
         children: [
           const _WelcomeBackground(),
           SafeArea(
-            child: ListView(
-              padding: EdgeInsets.symmetric(
-                horizontal: horizontalPadding,
-                vertical: isSmallScreen ? 12 : 16,
-              ),
-              children: [
-                const SizedBox(height: 8),
-                // Top header with NEROVA and colored bars
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'NEROVA',
-                      style: GoogleFonts.nunito(
-                        fontSize: isSmallScreen ? 32 : 42,
-                        fontWeight: FontWeight.w900,
-                        color: AppColors.ink,
-                        letterSpacing: 1.2,
-                      ),
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight:
+                      screenHeight -
+                      MediaQuery.of(context).padding.top -
+                      MediaQuery.of(context).padding.bottom,
+                ),
+                child: IntrinsicHeight(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: padX,
+                      vertical: padTopBottom,
                     ),
-                    const SizedBox(width: 12),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _HorizontalColorBar(
-                          color: const Color(0xFF9CC9FF),
-                          width: 42,
-                        ),
-                        const SizedBox(height: 6),
-                        _HorizontalColorBar(
-                          color: const Color(0xFFFFC8B3),
-                          width: 42,
-                        ),
-                        const SizedBox(height: 6),
-                        _HorizontalColorBar(
-                          color: const Color(0xFFFFE9A6),
-                          width: 42,
-                        ),
-                        const SizedBox(height: 6),
-                        _HorizontalColorBar(
-                          color: const Color(0xFF8BE0D5),
-                          width: 42,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: isSmallScreen ? 20 : 28),
-                const _HeroMascot(),
-                SizedBox(height: isSmallScreen ? 16 : 20),
-                Text.rich(
-                  TextSpan(
-                    style: GoogleFonts.nunito(
-                      fontSize: isSmallScreen ? 28 : 34,
-                      fontWeight: FontWeight.w900,
-                      height: 1.3,
-                      color: AppColors.ink,
-                    ),
-                    children: [
-                      const TextSpan(text: "Your "),
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: isSmallScreen ? 10 : 12,
-                            vertical: 6,
-                          ),
-                          margin: const EdgeInsets.only(right: 4),
-                          decoration: BoxDecoration(
-                            color: AppColors.electric.withOpacity(0.18),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            'study buddy',
-                            style: GoogleFonts.nunito(
-                              fontSize: isSmallScreen ? 28 : 34,
-                              fontWeight: FontWeight.w900,
-                              color: AppColors.electric,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const TextSpan(text: '\nfor calmer, smarter days.'),
-                    ],
-                  ),
-                ),
-                SizedBox(height: isSmallScreen ? 18 : 22),
-                Text(
-                  'Plan your tasks. Learn with clarity. Stay focused. Take care of your mind - all in one place.',
-                  style: GoogleFonts.nunito(
-                    fontSize: isSmallScreen ? 16 : 19,
-                    height: 1.7,
-                    color: AppColors.navy.withOpacity(0.7),
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(height: isSmallScreen ? 24 : 32),
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFEDE7FF),
-                    borderRadius: BorderRadius.circular(999),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.06),
-                        blurRadius: 16,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (_) => const LoginScreen(),
-                            ),
-                          );
-                        },
-                        style: TextButton.styleFrom(
-                          foregroundColor: AppColors.navy.withOpacity(0.7),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 10,
-                          ),
-                        ),
-                        child: Text(
-                          'Skip',
+                        // A) Logo block
+                        Text(
+                          'NEROVA',
                           style: GoogleFonts.nunito(
-                            fontWeight: FontWeight.w700,
+                            fontSize: logoFontSize,
+                            fontWeight: FontWeight.w900,
+                            color: AppColors.ink,
+                            letterSpacing: 1.2,
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 4),
-                      FilledButton(
-                        style: FilledButton.styleFrom(
-                          backgroundColor: const Color(0xFFFFD5B3),
-                          foregroundColor: const Color(0xFF6B3F22),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 18,
-                            vertical: 12,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(999),
-                          ),
-                          elevation: 0,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (_) => const LoginScreen(),
+                        SizedBox(height: spaceLogoBelow),
+
+                        // B) Illustration block (bounded)
+                        Center(
+                          child: SizedBox(
+                            width: illustrationWidth,
+                            height: illustrationHeight,
+                            child: _MascotHeroImage(
+                              assetPath: _welcomeHeroAsset,
+                              borderRadius: illustrationRadius,
                             ),
-                          );
-                        },
-                        child: Text(
-                          'Start Learning',
-                          style: GoogleFonts.nunito(
-                            fontWeight: FontWeight.w800,
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 6),
-                      Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF1C1B29),
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              blurRadius: 12,
-                              offset: const Offset(0, 6),
+                        SizedBox(height: spaceIllustration),
+
+                        // C) Headline block (two lines)
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Your ',
+                                style: GoogleFonts.nunito(
+                                  fontSize: h1FontSize,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.ink,
+                                  height: 1.2,
+                                ),
+                              ),
+                              WidgetSpan(
+                                alignment: PlaceholderAlignment.middle,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: h1FontSize * 0.4,
+                                    vertical: 4,
+                                  ),
+                                  margin: const EdgeInsets.only(right: 4),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.electric.withOpacity(0.15),
+                                    borderRadius: BorderRadius.circular(
+                                      h1FontSize * 0.5,
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'study buddy',
+                                    style: GoogleFonts.nunito(
+                                      fontSize: h1FontSize,
+                                      fontWeight: FontWeight.w700,
+                                      color: AppColors.electric,
+                                      height: 1.2,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              TextSpan(
+                                text: '\nfor calmer, smarter days.',
+                                style: GoogleFonts.nunito(
+                                  fontSize: h2FontSize,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.ink,
+                                  height: 1.2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: spaceHeadline),
+
+                        // D) Subtext block
+                        Text(
+                          'Plan your tasks. Learn with clarity. Stay focused. Take care of your mind—all in one place.',
+                          style: GoogleFonts.nunito(
+                            fontSize: bodyFontSize,
+                            height: 1.55,
+                            color: AppColors.navy.withOpacity(0.75),
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 6,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: spaceToCTA),
+
+                        // E) CTA Buttons block (clean, two-button stack)
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Primary button (Sign Up)
+                            SizedBox(
+                              width: double.infinity,
+                              height: btnHeight,
+                              child: FilledButton(
+                                style: FilledButton.styleFrom(
+                                  backgroundColor: const Color(0xFFFFD5B3),
+                                  foregroundColor: const Color(0xFF6B3F22),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      btnRadius,
+                                    ),
+                                  ),
+                                  elevation: 0,
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (_) => const LoginScreen(),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  'Sign Up',
+                                  style: GoogleFonts.nunito(
+                                    fontSize: btnFontSize,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            // Secondary button (Log In)
+                            SizedBox(
+                              width: double.infinity,
+                              height: btnHeight,
+                              child: OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  foregroundColor: AppColors.navy.withOpacity(
+                                    0.8,
+                                  ),
+                                  side: BorderSide(
+                                    color: AppColors.navy.withOpacity(0.2),
+                                    width: 1,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      btnRadius,
+                                    ),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (_) => const LoginScreen(),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  'Log In',
+                                  style: GoogleFonts.nunito(
+                                    fontSize: btnFontSize,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                        child: const Icon(
-                          Icons.arrow_forward_rounded,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
+                        SizedBox(height: padTopBottom),
+                      ],
+                    ),
                   ),
                 ),
-                const SizedBox(height: 16),
-              ],
+              ),
             ),
           ),
         ],
       ),
-    );
-  }
-}
-
-class _HeroMascot extends StatelessWidget {
-  const _HeroMascot();
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 340,
-      child: Center(child: _MascotHeroImage(assetPath: _welcomeHeroAsset)),
     );
   }
 }
@@ -336,50 +344,6 @@ class _AsymmetricPill extends StatelessWidget {
   }
 }
 
-class _BookStack extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _BookSlice(color: const Color(0xFF9CC9FF)),
-        const SizedBox(height: 8),
-        _BookSlice(color: const Color(0xFFFFC8B3)),
-        const SizedBox(height: 8),
-        _BookSlice(color: const Color(0xFFFFE9A6)),
-        const SizedBox(height: 8),
-        _BookSlice(color: const Color(0xFF8BE0D5)),
-      ],
-    );
-  }
-}
-
-class _HorizontalColorBar extends StatelessWidget {
-  const _HorizontalColorBar({required this.color, required this.width});
-
-  final Color color;
-  final double width;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: 14,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(7),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _BookSlice extends StatelessWidget {
   const _BookSlice({required this.color, this.width = 92});
 
@@ -407,57 +371,51 @@ class _BookSlice extends StatelessWidget {
 }
 
 class _MascotHeroImage extends StatelessWidget {
-  const _MascotHeroImage({required this.assetPath});
+  const _MascotHeroImage({required this.assetPath, this.borderRadius = 26});
 
   final String assetPath;
+  final double borderRadius;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Transform(
-          alignment: Alignment.center,
-          transform: Matrix4.identity()
-            ..setEntry(3, 2, 0.001)
-            ..rotateX(0.05)
-            ..rotateZ(-0.02),
-          child: Container(
-            width: double.infinity,
-            height: 340,
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(26),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.12),
-                  blurRadius: 24,
-                  offset: const Offset(0, 12),
-                  spreadRadius: 2,
-                ),
-              ],
+    return Transform(
+      alignment: Alignment.center,
+      transform: Matrix4.identity()
+        ..setEntry(3, 2, 0.001)
+        ..rotateX(0.05)
+        ..rotateZ(-0.02),
+      child: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(borderRadius),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.12),
+              blurRadius: 24,
+              offset: const Offset(0, 12),
+              spreadRadius: 2,
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(26),
-              child: Image.asset(
-                assetPath,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  color: const Color(0xFFFFF4F1),
-                  child: const Center(
-                    child: Icon(
-                      Icons.face_retouching_natural,
-                      color: Color(0xFFE4A8A8),
-                      size: 56,
-                    ),
-                  ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(borderRadius),
+          child: Image.asset(
+            assetPath,
+            fit: BoxFit.cover,
+            errorBuilder: (_, __, ___) => Container(
+              color: const Color(0xFFFFF4F1),
+              child: const Center(
+                child: Icon(
+                  Icons.face_retouching_natural,
+                  color: Color(0xFFE4A8A8),
+                  size: 56,
                 ),
               ),
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 }
