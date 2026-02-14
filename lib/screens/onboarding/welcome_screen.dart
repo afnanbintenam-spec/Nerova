@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../theme/app_theme.dart';
-import '../../widgets/modern_back_button.dart';
 import '../auth/login_screen.dart';
 
 const String _welcomeHeroAsset = 'assets/images/onboarding/welcome_hero.png';
@@ -22,186 +21,194 @@ class WelcomeScreen extends StatelessWidget {
         children: [
           const _WelcomeBackground(),
           SafeArea(
-            child: Padding(
+            child: ListView(
               padding: EdgeInsets.symmetric(
                 horizontal: horizontalPadding,
                 vertical: isSmallScreen ? 12 : 16,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 8),
-                  const ModernBackButton(),
-                  const SizedBox(height: 12),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(999),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.08),
-                            blurRadius: 14,
-                            offset: const Offset(0, 6),
-                          ),
-                        ],
-                      ),
-                      child: Text(
-                        'University Study Planner',
-                        style: GoogleFonts.nunito(
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.navy,
-                          fontSize: 12.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: isSmallScreen ? 14 : 18),
-                  const _HeroMascot(),
-                  SizedBox(height: isSmallScreen ? 18 : 24),
-                  Text.rich(
-                    TextSpan(
+              children: [
+                const SizedBox(height: 8),
+                // Top header with NEROVA and colored bars
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'NEROVA',
                       style: GoogleFonts.nunito(
-                        fontSize: isSmallScreen ? 26 : 30,
-                        fontWeight: FontWeight.w800,
-                        height: 1.2,
+                        fontSize: isSmallScreen ? 32 : 42,
+                        fontWeight: FontWeight.w900,
                         color: AppColors.ink,
+                        letterSpacing: 1.2,
                       ),
+                    ),
+                    const SizedBox(width: 12),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const TextSpan(text: "Let's Start\nYour "),
-                        WidgetSpan(
-                          alignment: PlaceholderAlignment.middle,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: isSmallScreen ? 8 : 10,
-                              vertical: 4,
-                            ),
-                            margin: const EdgeInsets.only(right: 4),
-                            decoration: BoxDecoration(
-                              color: AppColors.electric.withOpacity(0.18),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Text(
-                              'Learning',
-                              style: GoogleFonts.nunito(
-                                fontSize: isSmallScreen ? 24 : 28,
-                                fontWeight: FontWeight.w900,
-                                color: AppColors.electric,
-                              ),
-                            ),
-                          ),
+                        _HorizontalColorBar(
+                          color: const Color(0xFF9CC9FF),
+                          width: 42,
                         ),
-                        const TextSpan(text: 'Adventure'),
+                        const SizedBox(height: 6),
+                        _HorizontalColorBar(
+                          color: const Color(0xFFFFC8B3),
+                          width: 42,
+                        ),
+                        const SizedBox(height: 6),
+                        _HorizontalColorBar(
+                          color: const Color(0xFFFFE9A6),
+                          width: 42,
+                        ),
+                        const SizedBox(height: 6),
+                        _HorizontalColorBar(
+                          color: const Color(0xFF8BE0D5),
+                          width: 42,
+                        ),
                       ],
                     ),
-                  ),
-                  SizedBox(height: isSmallScreen ? 10 : 12),
-                  Text(
-                    'Plan smarter, learn faster, and stay balanced with daily guidance.',
+                  ],
+                ),
+                SizedBox(height: isSmallScreen ? 20 : 28),
+                const _HeroMascot(),
+                SizedBox(height: isSmallScreen ? 16 : 20),
+                Text.rich(
+                  TextSpan(
                     style: GoogleFonts.nunito(
-                      fontSize: isSmallScreen ? 13 : 14.5,
-                      height: 1.5,
-                      color: AppColors.navy.withOpacity(0.7),
-                      fontWeight: FontWeight.w600,
+                      fontSize: isSmallScreen ? 28 : 34,
+                      fontWeight: FontWeight.w900,
+                      height: 1.3,
+                      color: AppColors.ink,
                     ),
-                  ),
-                  const Spacer(),
-                  Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFEDE7FF),
-                      borderRadius: BorderRadius.circular(999),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.06),
-                          blurRadius: 16,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (_) => const LoginScreen(),
-                              ),
-                            );
-                          },
-                          style: TextButton.styleFrom(
-                            foregroundColor: AppColors.navy.withOpacity(0.7),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 10,
-                            ),
+                    children: [
+                      const TextSpan(text: "Your "),
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: isSmallScreen ? 10 : 12,
+                            vertical: 6,
                           ),
-                          child: Text(
-                            'Skip',
-                            style: GoogleFonts.nunito(
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        FilledButton(
-                          style: FilledButton.styleFrom(
-                            backgroundColor: const Color(0xFFFFD5B3),
-                            foregroundColor: const Color(0xFF6B3F22),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 18,
-                              vertical: 12,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(999),
-                            ),
-                            elevation: 0,
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (_) => const LoginScreen(),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            'Start Learning',
-                            style: GoogleFonts.nunito(
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        Container(
-                          width: 44,
-                          height: 44,
+                          margin: const EdgeInsets.only(right: 4),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF1C1B29),
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                blurRadius: 12,
-                                offset: const Offset(0, 6),
-                              ),
-                            ],
+                            color: AppColors.electric.withOpacity(0.18),
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          child: const Icon(
-                            Icons.arrow_forward_rounded,
-                            color: Colors.white,
+                          child: Text(
+                            'study buddy',
+                            style: GoogleFonts.nunito(
+                              fontSize: isSmallScreen ? 28 : 34,
+                              fontWeight: FontWeight.w900,
+                              color: AppColors.electric,
+                            ),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      const TextSpan(text: '\nfor calmer, smarter days.'),
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                ],
-              ),
+                ),
+                SizedBox(height: isSmallScreen ? 18 : 22),
+                Text(
+                  'Plan your tasks. Learn with clarity. Stay focused. Take care of your mind - all in one place.',
+                  style: GoogleFonts.nunito(
+                    fontSize: isSmallScreen ? 16 : 19,
+                    height: 1.7,
+                    color: AppColors.navy.withOpacity(0.7),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: isSmallScreen ? 24 : 32),
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFEDE7FF),
+                    borderRadius: BorderRadius.circular(999),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.06),
+                        blurRadius: 16,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (_) => const LoginScreen(),
+                            ),
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.navy.withOpacity(0.7),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
+                        ),
+                        child: Text(
+                          'Skip',
+                          style: GoogleFonts.nunito(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      FilledButton(
+                        style: FilledButton.styleFrom(
+                          backgroundColor: const Color(0xFFFFD5B3),
+                          foregroundColor: const Color(0xFF6B3F22),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 18,
+                            vertical: 12,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                          elevation: 0,
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (_) => const LoginScreen(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Start Learning',
+                          style: GoogleFonts.nunito(
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1C1B29),
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 12,
+                              offset: const Offset(0, 6),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.arrow_forward_rounded,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
             ),
           ),
         ],
@@ -216,39 +223,8 @@ class _HeroMascot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 320,
-      child: Stack(
-        children: [
-          Positioned(left: 6, top: 40, child: _StarBadge(text: 'Hi')),
-          Positioned(right: 12, bottom: 22, child: _StarBadge(text: 'Hello')),
-          Center(
-            child: Container(
-              height: 280,
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF6F2FF),
-                borderRadius: BorderRadius.circular(36),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
-                    blurRadius: 24,
-                    offset: const Offset(0, 14),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Expanded(child: _BookStack()),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _MascotHeroImage(assetPath: _welcomeHeroAsset),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+      height: 340,
+      child: Center(child: _MascotHeroImage(assetPath: _welcomeHeroAsset)),
     );
   }
 }
@@ -378,16 +354,43 @@ class _BookStack extends StatelessWidget {
   }
 }
 
-class _BookSlice extends StatelessWidget {
-  const _BookSlice({required this.color});
+class _HorizontalColorBar extends StatelessWidget {
+  const _HorizontalColorBar({required this.color, required this.width});
 
   final Color color;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 22,
-      width: 92,
+      width: width,
+      height: 14,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(7),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BookSlice extends StatelessWidget {
+  const _BookSlice({required this.color, this.width = 92});
+
+  final Color color;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 20,
+      width: width,
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(10),
@@ -412,45 +415,46 @@ class _MascotHeroImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
       children: [
-        Container(
-          width: 138,
-          height: 176,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(26),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.08),
-                blurRadius: 14,
-                offset: const Offset(0, 8),
-              ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(26),
-            child: Image.asset(
-              assetPath,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(
-                color: const Color(0xFFFFF4F1),
-                child: const Center(
-                  child: Icon(
-                    Icons.face_retouching_natural,
-                    color: Color(0xFFE4A8A8),
-                    size: 56,
+        Transform(
+          alignment: Alignment.center,
+          transform: Matrix4.identity()
+            ..setEntry(3, 2, 0.001)
+            ..rotateX(0.05)
+            ..rotateZ(-0.02),
+          child: Container(
+            width: double.infinity,
+            height: 340,
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(26),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.12),
+                  blurRadius: 24,
+                  offset: const Offset(0, 12),
+                  spreadRadius: 2,
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(26),
+              child: Image.asset(
+                assetPath,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(
+                  color: const Color(0xFFFFF4F1),
+                  child: const Center(
+                    child: Icon(
+                      Icons.face_retouching_natural,
+                      color: Color(0xFFE4A8A8),
+                      size: 56,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        Container(
-          height: 18,
-          width: 90,
-          decoration: BoxDecoration(
-            color: const Color(0xFFE3D9FF),
-            borderRadius: BorderRadius.circular(12),
           ),
         ),
       ],
