@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../theme/app_theme.dart';
+import '../../widgets/modern_back_button.dart';
 import '../../widgets/styled_card.dart';
 
 class FocusScreen extends StatefulWidget {
@@ -124,6 +125,7 @@ class _FocusScreenState extends State<FocusScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: const ModernBackButton(),
         title: Text(
           'Focus',
           style: GoogleFonts.dmSans(fontWeight: FontWeight.w700),

@@ -4,7 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../providers/auth_provider.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/modern_back_button.dart';
+import '../../widgets/modern_input_field.dart';
 import '../shell/main_shell.dart';
+
+const String _signupIconAsset = 'assets/images/onboarding/login page icon.jpg';
 
 class RegisterScreen extends ConsumerStatefulWidget {
   const RegisterScreen({super.key});
@@ -59,10 +63,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_rounded, color: AppColors.ink),
-          onPressed: () => Navigator.pop(context),
-        ),
+        leading: const ModernBackButton(),
       ),
       body: Stack(
         children: [
@@ -104,18 +105,27 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // Logo/Icon
+                      // Login Page Icon
                       Container(
-                        width: isSmallScreen ? 80 : 100,
-                        height: isSmallScreen ? 80 : 100,
+                        width: isSmallScreen ? 140 : 160,
+                        height: isSmallScreen ? 140 : 160,
                         decoration: BoxDecoration(
-                          color: AppColors.mint.withOpacity(0.15),
-                          shape: BoxShape.circle,
+                          borderRadius: BorderRadius.circular(28),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.mint.withOpacity(0.2),
+                              blurRadius: 30,
+                              spreadRadius: 5,
+                              offset: const Offset(0, 10),
+                            ),
+                          ],
                         ),
-                        child: Icon(
-                          Icons.person_add_rounded,
-                          size: isSmallScreen ? 40 : 50,
-                          color: AppColors.mint,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(28),
+                          child: Image.asset(
+                            _signupIconAsset,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                       SizedBox(height: isSmallScreen ? 24 : 32),
@@ -143,11 +153,12 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       SizedBox(height: isSmallScreen ? 32 : 40),
 
                       // Name field
-                      _InputField(
+                      ModernInputField(
                         controller: _nameController,
                         label: 'Full Name',
                         hint: 'Enter your full name',
                         prefixIcon: Icons.person_rounded,
+                        useGlassEffect: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your name';
@@ -161,12 +172,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       const SizedBox(height: 16),
 
                       // Email field
-                      _InputField(
+                      ModernInputField(
                         controller: _emailController,
                         label: 'Email',
                         hint: 'Enter your email',
                         prefixIcon: Icons.email_rounded,
                         keyboardType: TextInputType.emailAddress,
+                        useGlassEffect: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your email';
@@ -180,12 +192,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       const SizedBox(height: 16),
 
                       // Password field
-                      _InputField(
+                      ModernInputField(
                         controller: _passwordController,
                         label: 'Password',
                         hint: 'Enter your password',
                         prefixIcon: Icons.lock_rounded,
                         obscureText: _obscurePassword,
+                        useGlassEffect: true,
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscurePassword
@@ -212,12 +225,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       const SizedBox(height: 16),
 
                       // Confirm Password field
-                      _InputField(
+                      ModernInputField(
                         controller: _confirmPasswordController,
                         label: 'Confirm Password',
                         hint: 'Re-enter your password',
                         prefixIcon: Icons.lock_outline_rounded,
                         obscureText: _obscureConfirmPassword,
+                        useGlassEffect: true,
                         suffixIcon: IconButton(
                           icon: Icon(
                             _obscureConfirmPassword
@@ -348,91 +362,6 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _InputField extends StatelessWidget {
-  const _InputField({
-    required this.controller,
-    required this.label,
-    required this.hint,
-    required this.prefixIcon,
-    this.obscureText = false,
-    this.keyboardType,
-    this.suffixIcon,
-    this.validator,
-  });
-
-  final TextEditingController controller;
-  final String label;
-  final String hint;
-  final IconData prefixIcon;
-  final bool obscureText;
-  final TextInputType? keyboardType;
-  final Widget? suffixIcon;
-  final String? Function(String?)? validator;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: GoogleFonts.nunito(
-            fontSize: 14,
-            fontWeight: FontWeight.w700,
-            color: AppColors.navy,
-          ),
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          controller: controller,
-          obscureText: obscureText,
-          keyboardType: keyboardType,
-          validator: validator,
-          style: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.w600),
-          decoration: InputDecoration(
-            hintText: hint,
-            hintStyle: GoogleFonts.nunito(
-              fontWeight: FontWeight.w600,
-              color: AppColors.navy.withOpacity(0.4),
-            ),
-            prefixIcon: Icon(
-              prefixIcon,
-              color: AppColors.navy.withOpacity(0.5),
-            ),
-            suffixIcon: suffixIcon,
-            filled: true,
-            fillColor: AppColors.mist,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide.none,
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide.none,
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: AppColors.mint, width: 2),
-            ),
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide(color: AppColors.rose, width: 1.5),
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: const BorderSide(color: AppColors.rose, width: 2),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 16,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

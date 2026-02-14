@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../theme/app_theme.dart';
+import '../../widgets/modern_back_button.dart';
 import '../../widgets/styled_card.dart';
 
 const String _homeHeroAsset = 'assets/images/onboarding/home_header.png';
@@ -53,6 +54,11 @@ class HomeScreen extends StatelessWidget {
                 vertical: isSmallScreen ? 12 : 16,
               ),
               children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: ModernBackButton(iconColor: AppColors.electric),
+                ),
+                SizedBox(height: isSmallScreen ? 12 : 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

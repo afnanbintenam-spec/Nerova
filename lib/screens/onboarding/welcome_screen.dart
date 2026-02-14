@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../theme/app_theme.dart';
+import '../../widgets/modern_back_button.dart';
 import '../auth/login_screen.dart';
 
 const String _welcomeHeroAsset = 'assets/images/onboarding/welcome_hero.png';
@@ -30,6 +31,8 @@ class WelcomeScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 8),
+                  const ModernBackButton(),
+                  const SizedBox(height: 12),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Container(

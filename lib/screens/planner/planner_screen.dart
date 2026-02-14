@@ -5,8 +5,11 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../models/task.dart';
 import '../../providers/task_provider.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/modern_back_button.dart';
 import '../../widgets/styled_card.dart';
 import '../../widgets/task_form_dialog.dart';
+import '../../widgets/loading_skeleton.dart';
+import '../../widgets/state_widgets.dart';
 
 class PlannerScreen extends ConsumerWidget {
   const PlannerScreen({super.key});
@@ -26,6 +29,7 @@ class PlannerScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: const ModernBackButton(),
         title: Text(
           'Planner',
           style: GoogleFonts.dmSans(fontWeight: FontWeight.w700),
@@ -70,72 +74,30 @@ class PlannerScreen extends ConsumerWidget {
 
               // Task list
               if (taskState.isLoading)
-                const Expanded(
-                  child: Center(child: CircularProgressIndicator()),
-                )
+                const Expanded(child: TaskListSkeleton())
               else if (taskState.error != null)
                 Expanded(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.error_outline_rounded,
-                          size: 64,
-                          color: AppColors.rose,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          taskState.error!,
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.dmSans(
-                            fontSize: 14,
-                            color: AppColors.navy.withOpacity(0.8),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        FilledButton.icon(
-                          onPressed: () =>
-                              ref.read(taskListProvider.notifier).loadTasks(),
-                          icon: const Icon(Icons.refresh_rounded),
-                          label: const Text('Retry'),
-                        ),
-                      ],
-                    ),
+                  child: ErrorState(
+                    title: 'Failed to load tasks',
+                    message: taskState.error,
+                    onRetry: () =>
+                        ref.read(taskListProvider.notifier).loadTasks(),
                   ),
                 )
               else if (taskState.filteredTasks.isEmpty)
                 Expanded(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.task_alt_rounded,
-                          size: 80,
-                          color: AppColors.navy.withOpacity(0.2),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          taskState.filter == 'all'
-                              ? 'No tasks yet'
-                              : 'No ${taskState.filter} tasks',
-                          style: GoogleFonts.dmSans(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.navy.withOpacity(0.5),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Tap the "Add Task" button to create one',
-                          style: GoogleFonts.dmSans(
-                            fontSize: 14,
-                            color: AppColors.navy.withOpacity(0.4),
-                          ),
-                        ),
-                      ],
-                    ),
+                  child: EmptyState(
+                    title: taskState.filter == 'all'
+                        ? 'No tasks yet'
+                        : 'No ${taskState.filter} tasks',
+                    message: taskState.filter == 'all'
+                        ? 'Create your first task to get started.'
+                        : 'Try changing your filter to see other tasks.',
+                    onAction: taskState.filter == 'all'
+                        ? () => _showTaskDialog(context)
+                        : null,
+                    actionLabel: 'Add Task',
+                    icon: Icons.task_alt_rounded,
                   ),
                 )
               else

@@ -6,24 +6,78 @@ import '../planner/planner_screen.dart';
 import '../ai/ai_screen.dart';
 import '../focus/focus_screen.dart';
 import '../insights/insights_screen.dart';
+import '../../services/connectivity_service.dart';
+import '../../services/sync_service.dart';
+import '../../widgets/state_widgets.dart';
 
 final bottomNavIndexProvider = StateProvider<int>((ref) => 0);
 
-class MainShell extends ConsumerWidget {
-  const MainShell({super.key});
+class MainShell extends ConsumerStatefulWidget {
+  final int initialIndex;
+
+  const MainShell({super.key, this.initialIndex = 0});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MainShell> createState() => _MainShellState();
+}
+
+class _MainShellState extends ConsumerState<MainShell> {
+  @override
+  void initState() {
+    super.initState();
+    // Set initial index when widget is created
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(bottomNavIndexProvider.notifier).state = widget.initialIndex;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final index = ref.watch(bottomNavIndexProvider);
+    final connectivityStatus = ref.watch(connectivityStatusProvider);
+    final pendingSyncCount = ref.watch(pendingSyncCountProvider);
+
     return Scaffold(
-      body: IndexedStack(
-        index: index,
-        children: const [
-          HomeScreen(),
-          PlannerScreen(),
-          AiScreen(),
-          FocusScreen(),
-          InsightsScreen(),
+      body: Column(
+        children: [
+          // Show offline banner when not connected
+          connectivityStatus.when(
+            data: (isOnline) {
+              if (!isOnline) {
+                return const OfflineBanner();
+              }
+              // Show sync indicator if there are pending operations
+              if (pendingSyncCount > 0) {
+                return Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  color: Colors.amber.shade50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [SyncIndicator(pendingCount: pendingSyncCount)],
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            },
+            loading: () => const SizedBox.shrink(),
+            error: (_, __) => const SizedBox.shrink(),
+          ),
+          Expanded(
+            child: IndexedStack(
+              index: index,
+              children: const [
+                HomeScreen(),
+                PlannerScreen(),
+                AiScreen(),
+                FocusScreen(),
+                InsightsScreen(),
+              ],
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: LayoutBuilder(
