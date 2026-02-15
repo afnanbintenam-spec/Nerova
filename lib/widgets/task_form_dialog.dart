@@ -181,7 +181,7 @@ class _TaskFormDialogState extends ConsumerState<TaskFormDialog> {
                     Container(
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: AppColors.electric.withOpacity(0.1),
+                        color: AppColors.electric.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Icon(
@@ -406,7 +406,7 @@ class _PriorityChip extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            color: isSelected ? color : color.withOpacity(0.1),
+            color: isSelected ? color : color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: isSelected ? color : Colors.transparent,

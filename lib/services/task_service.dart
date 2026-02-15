@@ -113,10 +113,15 @@ class TaskService {
   }) async {
     try {
       final queryParams = <String, String>{};
-      if (isCompleted != null)
+      if (isCompleted != null) {
         queryParams['completed'] = isCompleted.toString();
-      if (isOverdue != null) queryParams['overdue'] = isOverdue.toString();
-      if (isDueToday != null) queryParams['today'] = isDueToday.toString();
+      }
+      if (isOverdue != null) {
+        queryParams['overdue'] = isOverdue.toString();
+      }
+      if (isDueToday != null) {
+        queryParams['today'] = isDueToday.toString();
+      }
 
       final query = queryParams.entries
           .map((e) => '${e.key}=${e.value}')

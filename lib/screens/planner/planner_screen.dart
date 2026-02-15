@@ -239,8 +239,8 @@ class _FilterChip extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
                   color: selected
-                      ? Colors.white.withOpacity(0.3)
-                      : AppColors.electric.withOpacity(0.1),
+                      ? Colors.white.withValues(alpha: 0.3)
+                      : AppColors.electric.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(999),
                 ),
                 child: Text(
@@ -303,7 +303,7 @@ class _TaskCard extends StatelessWidget {
                 : null,
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 16,
                 offset: const Offset(0, 6),
               ),
@@ -327,7 +327,7 @@ class _TaskCard extends StatelessWidget {
                     border: Border.all(
                       color: task.isCompleted
                           ? AppColors.mint
-                          : AppColors.navy.withOpacity(0.3),
+                          : AppColors.navy.withValues(alpha: 0.3),
                       width: 2,
                     ),
                   ),
@@ -356,7 +356,7 @@ class _TaskCard extends StatelessWidget {
                               fontSize: 15,
                               fontWeight: FontWeight.w700,
                               color: task.isCompleted
-                                  ? AppColors.navy.withOpacity(0.4)
+                                  ? AppColors.navy.withValues(alpha: 0.4)
                                   : AppColors.ink,
                               decoration: task.isCompleted
                                   ? TextDecoration.lineThrough
@@ -374,7 +374,7 @@ class _TaskCard extends StatelessWidget {
                           Icon(
                             Icons.school_rounded,
                             size: 14,
-                            color: AppColors.navy.withOpacity(0.5),
+                            color: AppColors.navy.withValues(alpha: 0.5),
                           ),
                           const SizedBox(width: 4),
                           Text(
@@ -382,7 +382,7 @@ class _TaskCard extends StatelessWidget {
                             style: GoogleFonts.dmSans(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color: AppColors.navy.withOpacity(0.6),
+                              color: AppColors.navy.withValues(alpha: 0.6),
                             ),
                           ),
                         ],
@@ -399,7 +399,7 @@ class _TaskCard extends StatelessWidget {
                             size: 14,
                             color: task.isOverdue
                                 ? AppColors.rose
-                                : AppColors.navy.withOpacity(0.5),
+                                : AppColors.navy.withValues(alpha: 0.5),
                           ),
                           const SizedBox(width: 4),
                           Text(
@@ -409,7 +409,7 @@ class _TaskCard extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                               color: task.isOverdue
                                   ? AppColors.rose
-                                  : AppColors.navy.withOpacity(0.8),
+                                  : AppColors.navy.withValues(alpha: 0.8),
                             ),
                           ),
                         ],
@@ -422,7 +422,7 @@ class _TaskCard extends StatelessWidget {
                         task.description!,
                         style: GoogleFonts.dmSans(
                           fontSize: 12,
-                          color: AppColors.navy.withOpacity(0.5),
+                          color: AppColors.navy.withValues(alpha: 0.5),
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -454,7 +454,7 @@ class _PriorityBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
+        color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(999),
       ),
       child: Text(

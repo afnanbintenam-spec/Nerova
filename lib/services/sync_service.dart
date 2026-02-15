@@ -70,7 +70,7 @@ class SyncService {
           if (item.retryCount >= _maxRetries) {
             // Max retries reached, remove from queue
             await _box!.delete(item.id);
-            print('Max retries reached for ${item.id}, removing from queue');
+            // Item permanently failed after max retries
           } else {
             // Save updated item back to box
             await _box!.put(item.id, item);

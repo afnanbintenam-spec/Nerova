@@ -63,7 +63,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               width: 280,
               height: 280,
               decoration: BoxDecoration(
-                color: AppColors.electric.withOpacity(0.05),
+                color: AppColors.electric.withValues(alpha: 0.05),
                 shape: BoxShape.circle,
               ),
             ),
@@ -82,7 +82,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               width: 240,
               height: 240,
               decoration: BoxDecoration(
-                color: AppColors.mint.withOpacity(0.05),
+                color: AppColors.mint.withValues(alpha: 0.05),
                 shape: BoxShape.circle,
               ),
             ),
@@ -110,7 +110,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           borderRadius: BorderRadius.circular(28),
                           boxShadow: [
                             BoxShadow(
-                              color: AppColors.electric.withOpacity(0.2),
+                              color: AppColors.electric.withValues(alpha: 0.2),
                               blurRadius: 30,
                               spreadRadius: 5,
                               offset: const Offset(0, 10),
@@ -136,7 +136,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.06),
+                            color: Colors.black.withValues(alpha: 0.06),
                             blurRadius: 20,
                             offset: const Offset(0, 8),
                           ),
@@ -192,7 +192,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   _obscurePassword
                                       ? Icons.visibility_off_outlined
                                       : Icons.visibility_outlined,
-                                  color: AppColors.navy.withOpacity(0.5),
+                                  color: AppColors.navy.withValues(alpha: 0.5),
                                 ),
                                 onPressed: () {
                                   setState(() {
@@ -275,67 +275,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             ),
                             const SizedBox(height: 20),
 
-                            // Divider
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Divider(
-                                    color: AppColors.navy.withOpacity(0.2),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                  ),
-                                  child: Text(
-                                    'OR',
-                                    style: GoogleFonts.nunito(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
-                                      color: AppColors.navy.withOpacity(0.5),
-                                    ),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Divider(
-                                    color: AppColors.navy.withOpacity(0.2),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-
-                            // Social Login Buttons
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                _buildSocialButton(
-                                  'assets/images/social/facebook.png',
-                                  AppColors.electric,
-                                ),
-                                const SizedBox(width: 16),
-                                _buildSocialButton(
-                                  'assets/images/social/google.png',
-                                  AppColors.amber,
-                                ),
-                                const SizedBox(width: 16),
-                                _buildSocialButton(
-                                  'assets/images/social/apple.png',
-                                  AppColors.ink,
-                                ),
-                              ],
-                            ),
-
                             // Error message
                             if (authState.error != null) ...[
                               const SizedBox(height: 16),
                               Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: AppColors.rose.withOpacity(0.1),
+                                  color: AppColors.rose.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
-                                    color: AppColors.rose.withOpacity(0.3),
+                                    color: AppColors.rose.withValues(alpha: 0.3),
                                   ),
                                 ),
                                 child: Row(
@@ -375,7 +324,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           style: GoogleFonts.nunito(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.navy.withOpacity(0.7),
+                            color: AppColors.navy.withValues(alpha: 0.7),
                           ),
                         ),
                         TextButton(
@@ -408,33 +357,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildSocialButton(String assetPath, Color backgroundColor) {
-    return Container(
-      width: 50,
-      height: 50,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        shape: BoxShape.circle,
-        border: Border.all(color: AppColors.line.withOpacity(0.3), width: 1.5),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.06), blurRadius: 12),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {
-            // TODO: Implement social login
-          },
-          borderRadius: BorderRadius.circular(25),
-          child: Center(
-            child: Icon(Icons.circle, size: 20, color: backgroundColor),
-          ),
-        ),
       ),
     );
   }

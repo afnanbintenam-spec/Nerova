@@ -11,6 +11,7 @@ class AppColors {
   static const amber = Color(0xFFF9B233);
   static const rose = Color(0xFFF07167);
   static const line = Color(0xFFE2E8F0);
+  static const neutral = Color(0xFF9CA3AF);
 }
 
 class AppTheme {

@@ -74,7 +74,7 @@ class InsightsScreen extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 18,
                     offset: const Offset(0, 8),
                   ),
@@ -215,7 +215,7 @@ class InsightsScreen extends ConsumerWidget {
                               decoration: BoxDecoration(
                                 color: _getMoodColor(
                                   mood.mood,
-                                ).withOpacity(0.1),
+                                ).withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
@@ -332,7 +332,7 @@ class _InsightTile extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: color.withOpacity(0.12),
+              color: color.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(14),
             ),
             child: Icon(icon, color: color),
@@ -355,7 +355,7 @@ class _InsightTile extends StatelessWidget {
                   subtitle,
                   style: GoogleFonts.dmSans(
                     fontSize: 13,
-                    color: AppColors.navy.withOpacity(0.6),
+                    color: AppColors.navy.withValues(alpha: 0.6),
                   ),
                 ),
               ],
@@ -385,9 +385,9 @@ class _ScorePill extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
+          color: color.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: color.withOpacity(0.2)),
+          border: Border.all(color: color.withValues(alpha: 0.2)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -397,7 +397,7 @@ class _ScorePill extends StatelessWidget {
               style: GoogleFonts.dmSans(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
-                color: AppColors.navy.withOpacity(0.6),
+                color: AppColors.navy.withValues(alpha: 0.6),
               ),
             ),
             const SizedBox(height: 6),
@@ -438,7 +438,7 @@ class _InsightCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -452,7 +452,7 @@ class _InsightCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(icon, size: 20, color: color),
@@ -493,7 +493,7 @@ class _WeeklyChart extends StatelessWidget {
       height: 140,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.mist.withOpacity(0.5),
+        color: AppColors.mist.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -510,7 +510,7 @@ class _WeeklyChart extends StatelessWidget {
                 width: 32,
                 height: height + 20,
                 decoration: BoxDecoration(
-                  color: AppColors.electric.withOpacity(0.2 + (height / 100)),
+                  color: AppColors.electric.withValues(alpha: 0.2 + (height / 100)),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 alignment: Alignment.center,
@@ -529,7 +529,7 @@ class _WeeklyChart extends StatelessWidget {
                 style: GoogleFonts.dmSans(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.navy.withOpacity(0.5),
+                  color: AppColors.navy.withValues(alpha: 0.5),
                 ),
               ),
             ],
@@ -581,7 +581,7 @@ class _MoodStat extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(icon, size: 16, color: color),
@@ -595,7 +595,7 @@ class _MoodStat extends StatelessWidget {
               style: GoogleFonts.dmSans(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
-                color: AppColors.navy.withOpacity(0.6),
+                color: AppColors.navy.withValues(alpha: 0.6),
               ),
             ),
             Text(

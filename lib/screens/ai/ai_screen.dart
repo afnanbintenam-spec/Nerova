@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../providers/chat_provider.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 import '../../theme/app_theme.dart';
-import '../../widgets/modern_back_button.dart';
 
 class AiScreen extends ConsumerStatefulWidget {
   const AiScreen({super.key});
@@ -11,419 +11,857 @@ class AiScreen extends ConsumerStatefulWidget {
   ConsumerState<AiScreen> createState() => _AiScreenState();
 }
 
-class _AiScreenState extends ConsumerState<AiScreen> {
-  final TextEditingController _messageController = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
+class _AiScreenState extends ConsumerState<AiScreen>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 4, vsync: this);
+  }
 
   @override
   void dispose() {
-    _messageController.dispose();
-    _scrollController.dispose();
+    _tabController.dispose();
     super.dispose();
-  }
-
-  void _sendMessage() {
-    final content = _messageController.text.trim();
-    if (content.isEmpty) return;
-
-    ref.read(chatProvider.notifier).sendMessage(content);
-    _messageController.clear();
-
-    // Scroll to bottom after sending
-    Future.delayed(const Duration(milliseconds: 100), () {
-      if (_scrollController.hasClients) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
-      }
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final chatState = ref.watch(chatProvider);
-    final isSmallScreen = MediaQuery.of(context).size.width < 600;
-
     return Scaffold(
       backgroundColor: AppColors.mist,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: const ModernBackButton(),
-        title: Row(
-          children: [
-            Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [AppColors.electric, AppColors.mint],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Icon(
-                Icons.psychology_rounded,
-                color: Colors.white,
-                size: 20,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Nero AI',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: AppColors.navy,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                Text(
-                  'Your Study Companion',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppColors.navy.withOpacity(0.6),
-                  ),
-                ),
-              ],
-            ),
+        title: Text(
+          'Nero AI',
+          style: GoogleFonts.dmSans(fontWeight: FontWeight.w700),
+        ),
+        centerTitle: false,
+        bottom: TabBar(
+          controller: _tabController,
+          indicatorColor: AppColors.electric,
+          labelColor: AppColors.electric,
+          unselectedLabelColor: AppColors.navy.withValues(alpha: 0.5),
+          labelStyle: GoogleFonts.nunito(
+            fontWeight: FontWeight.w700,
+            fontSize: 12,
+          ),
+          tabs: const [
+            Tab(text: 'Chat'),
+            Tab(text: 'Summarizer'),
+            Tab(text: 'Quiz'),
+            Tab(text: 'Planner'),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.delete_outline, color: AppColors.navy),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('Clear Chat'),
-                  content: const Text(
-                    'Are you sure you want to clear all messages?',
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        ref.read(chatProvider.notifier).clearMessages();
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Clear'),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
       ),
-      body: Column(
-        children: [
-          // Messages list
-          Expanded(
-            child: chatState.messages.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [AppColors.electric, AppColors.mint],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: const Icon(
-                            Icons.psychology_rounded,
-                            color: Colors.white,
-                            size: 40,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'Start a conversation',
-                          style: Theme.of(context).textTheme.titleLarge
-                              ?.copyWith(
-                                color: AppColors.navy,
-                                fontWeight: FontWeight.w700,
-                              ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Ask me anything about your studies!',
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(
-                                color: AppColors.navy.withOpacity(0.6),
-                              ),
-                        ),
-                      ],
-                    ),
-                  )
-                : ListView.builder(
-                    controller: _scrollController,
-                    padding: EdgeInsets.all(isSmallScreen ? 16 : 24),
-                    itemCount: chatState.messages.length,
-                    itemBuilder: (context, index) {
-                      final message = chatState.messages[index];
-                      return _ChatBubble(
-                        message: message,
-                        isSmallScreen: isSmallScreen,
-                      );
-                    },
-                  ),
-          ),
-
-          // Loading indicator
-          if (chatState.isLoading)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            AppColors.electric,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Nero is typing...',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.navy.withOpacity(0.6),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-          // Input field
-          Container(
-            padding: EdgeInsets.all(isSmallScreen ? 12 : 16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, -2),
-                ),
-              ],
-            ),
-            child: SafeArea(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      decoration: BoxDecoration(
-                        color: AppColors.mist,
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      child: TextField(
-                        controller: _messageController,
-                        decoration: const InputDecoration(
-                          hintText: 'Ask me anything...',
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(vertical: 12),
-                        ),
-                        style: Theme.of(
-                          context,
-                        ).textTheme.bodyMedium?.copyWith(color: AppColors.navy),
-                        maxLines: null,
-                        textInputAction: TextInputAction.send,
-                        onSubmitted: (_) => _sendMessage(),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [AppColors.electric, AppColors.mint],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.electric.withOpacity(0.3),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        onTap: _sendMessage,
-                        borderRadius: BorderRadius.circular(24),
-                        child: Container(
-                          width: 48,
-                          height: 48,
-                          alignment: Alignment.center,
-                          child: const Icon(
-                            Icons.send_rounded,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+      body: TabBarView(
+        controller: _tabController,
+        children: const [
+          _ChatTab(),
+          _SummarizerTab(),
+          _QuizTab(),
+          _PlannerTab(),
         ],
       ),
     );
   }
 }
 
-class _ChatBubble extends StatelessWidget {
-  final dynamic message;
-  final bool isSmallScreen;
+// ==================== CHAT TAB ====================
+class _ChatTab extends StatefulWidget {
+  const _ChatTab();
 
-  const _ChatBubble({required this.message, required this.isSmallScreen});
+  @override
+  State<_ChatTab> createState() => _ChatTabState();
+}
+
+class _ChatTabState extends State<_ChatTab> {
+  final TextEditingController _messageController = TextEditingController();
+  final List<Map<String, String>> _messages = [
+    {
+      'role': 'assistant',
+      'message':
+          'Hi! I\'m Nero, your AI study assistant. I can help you with explanations, summaries, quizzes, and study planning. What would you like to work on today?',
+    },
+  ];
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    super.dispose();
+  }
+
+  void _sendMessage() {
+    if (_messageController.text.isEmpty) return;
+
+    setState(() {
+      _messages.add({'role': 'user', 'message': _messageController.text});
+      _messageController.clear();
+
+      // Simulate AI response
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (mounted) {
+          setState(() {
+            _messages.add({
+              'role': 'assistant',
+              'message':
+                  'That\'s a great question! Let me help you with that. I can provide more detailed explanations if you need them.',
+            });
+          });
+        }
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final isUser = message.isUser;
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: _messages.length,
+            itemBuilder: (context, index) {
+              final message = _messages[index];
+              final isUser = message['role'] == 'user';
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Row(
-        mainAxisAlignment: isUser
-            ? MainAxisAlignment.end
-            : MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          if (!isUser) ...[
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [AppColors.electric, AppColors.mint],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+              return Align(
+                alignment: isUser
+                    ? Alignment.centerRight
+                    : Alignment.centerLeft,
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 10,
+                  ),
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.75,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isUser ? AppColors.electric : Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 8,
+                      ),
+                    ],
+                  ),
+                  child: Text(
+                    message['message']!,
+                    style: GoogleFonts.nunito(
+                      fontSize: 13,
+                      color: isUser ? Colors.white : AppColors.ink,
+                    ),
+                  ),
                 ),
-                borderRadius: BorderRadius.circular(8),
+              );
+            },
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 8,
+                offset: const Offset(0, -2),
               ),
-              child: const Icon(
-                Icons.psychology_rounded,
-                color: Colors.white,
-                size: 16,
-              ),
-            ),
-            const SizedBox(width: 8),
-          ],
-          Flexible(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: isUser ? AppColors.electric : Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(16),
-                  topRight: const Radius.circular(16),
-                  bottomLeft: Radius.circular(isUser ? 16 : 4),
-                  bottomRight: Radius.circular(isUser ? 4 : 16),
+            ],
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _messageController,
+                  decoration: InputDecoration(
+                    hintText: 'Ask Nero anything...',
+                    hintStyle: GoogleFonts.nunito(
+                      color: AppColors.navy.withValues(alpha: 0.4),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(
+                        color: AppColors.navy.withValues(alpha: 0.2),
+                      ),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
+                    ),
+                  ),
+                  onSubmitted: (_) => _sendMessage(),
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+              ),
+              const SizedBox(width: 8),
+              FloatingActionButton(
+                mini: true,
+                backgroundColor: AppColors.electric,
+                onPressed: _sendMessage,
+                child: const Icon(Icons.send_rounded, size: 18),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ==================== SUMMARIZER TAB ====================
+class _SummarizerTab extends StatefulWidget {
+  const _SummarizerTab();
+
+  @override
+  State<_SummarizerTab> createState() => _SummarizerTabState();
+}
+
+class _SummarizerTabState extends State<_SummarizerTab> {
+  final TextEditingController _textController = TextEditingController();
+  String? _summary;
+  bool _isLoading = false;
+
+  void _generateSummary() {
+    if (_textController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter text to summarize')),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      if (mounted) {
+        setState(() {
+          _summary =
+              'This text discusses ${_textController.text.split(' ').length <= 50 ? 'the provided content' : 'several key concepts'}. Key points include: 1) Main concept introduction, 2) Supporting details and examples, 3) Practical applications and implications. The material emphasizes the importance of understanding fundamentals before moving to advanced topics.';
+          _isLoading = false;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 8,
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.description_rounded,
+                    color: AppColors.electric,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'AI Summarizer',
+                    style: GoogleFonts.dmSans(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.ink,
+                    ),
                   ),
                 ],
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Paste text and let AI create a concise summary',
+                style: GoogleFonts.nunito(
+                  fontSize: 12,
+                  color: AppColors.navy.withValues(alpha: 0.6),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _textController,
+                maxLines: 6,
+                decoration: InputDecoration(
+                  hintText: 'Paste text to summarize...',
+                  hintStyle: GoogleFonts.nunito(
+                    color: AppColors.navy.withValues(alpha: 0.4),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(
+                      color: AppColors.navy.withValues(alpha: 0.2),
+                    ),
+                  ),
+                  contentPadding: const EdgeInsets.all(12),
+                ),
+              ),
+              const SizedBox(height: 12),
+              FilledButton(
+                onPressed: _generateSummary,
+                style: FilledButton.styleFrom(
+                  backgroundColor: AppColors.electric,
+                ),
+                child: const SizedBox(
+                  width: double.infinity,
+                  child: Center(child: Text('Generate Summary')),
+                ),
+              ),
+            ],
+          ),
+        ),
+        if (_isLoading) ...[
+          const SizedBox(height: 16),
+          Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.electric),
+            ),
+          ),
+        ],
+        if (_summary != null) ...[
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.mint.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.mint.withValues(alpha: 0.3)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.done_rounded, color: AppColors.mint, size: 20),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Summary',
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.mint,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  _summary!,
+                  style: GoogleFonts.nunito(
+                    fontSize: 13,
+                    color: AppColors.ink,
+                    height: 1.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+// ==================== QUIZ TAB ====================
+class _QuizTab extends StatefulWidget {
+  const _QuizTab();
+
+  @override
+  State<_QuizTab> createState() => _QuizTabState();
+}
+
+class _QuizTabState extends State<_QuizTab> {
+  final TextEditingController _topicController = TextEditingController();
+  String? _selectedDifficulty = 'Medium';
+  int? _questionCount = 5;
+  bool _isGenerating = false;
+  List<Map<String, String>>? _quiz;
+
+  void _generateQuiz() {
+    if (_topicController.text.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please enter a topic')));
+      return;
+    }
+
+    setState(() => _isGenerating = true);
+
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      if (mounted) {
+        setState(() {
+          _quiz = [
+            {
+              'q': 'What is the main concept of ${_topicController.text}?',
+              'options': 'Option A|Option B|Option C|Option D',
+              'answer': '0',
+            },
+            {
+              'q':
+                  'Which of the following best describes ${_topicController.text}?',
+              'options': 'Definition 1|Definition 2|Definition 3|Definition 4',
+              'answer': '1',
+            },
+          ];
+          _isGenerating = false;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _topicController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 8,
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.quiz_rounded, color: AppColors.rose, size: 20),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Quiz Generator',
+                    style: GoogleFonts.dmSans(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.ink,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Create custom quizzes for any topic',
+                style: GoogleFonts.nunito(
+                  fontSize: 12,
+                  color: AppColors.navy.withValues(alpha: 0.6),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _topicController,
+                decoration: InputDecoration(
+                  labelText: 'Topic or Course',
+                  hintText: 'e.g., Photosynthesis, Calculus...',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Difficulty',
+                          style: GoogleFonts.nunito(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.navy.withValues(alpha: 0.6),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        DropdownButton<String>(
+                          value: _selectedDifficulty,
+                          isExpanded: true,
+                          onChanged: (value) =>
+                              setState(() => _selectedDifficulty = value),
+                          items: ['Easy', 'Medium', 'Hard']
+                              .map(
+                                (level) => DropdownMenuItem(
+                                  value: level,
+                                  child: Text(level),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Questions',
+                          style: GoogleFonts.nunito(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.navy.withValues(alpha: 0.6),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        DropdownButton<int>(
+                          value: _questionCount,
+                          isExpanded: true,
+                          onChanged: (value) =>
+                              setState(() => _questionCount = value),
+                          items: [5, 10, 15, 20]
+                              .map(
+                                (count) => DropdownMenuItem(
+                                  value: count,
+                                  child: Text('$count'),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              FilledButton(
+                onPressed: _generateQuiz,
+                style: FilledButton.styleFrom(backgroundColor: AppColors.rose),
+                child: const SizedBox(
+                  width: double.infinity,
+                  child: Center(child: Text('Generate Quiz')),
+                ),
+              ),
+            ],
+          ),
+        ),
+        if (_isGenerating) ...[
+          const SizedBox(height: 16),
+          Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.rose),
+            ),
+          ),
+        ],
+        if (_quiz != null) ...[
+          const SizedBox(height: 16),
+          ..._quiz!.asMap().entries.map((entry) {
+            final index = entry.key + 1;
+            final question = entry.value;
+            return Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: AppColors.rose.withValues(alpha: 0.3),
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    message.content,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: isUser ? Colors.white : AppColors.navy,
+                    'Q$index: ${question['q']}',
+                    style: GoogleFonts.dmSans(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.ink,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 12),
+                  ...(question['options'] ?? '').split('|').map((option) {
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 8),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: AppColors.navy.withValues(alpha: 0.2),
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Material(
+                        child: InkWell(
+                          onTap: () {},
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Text(
+                              option,
+                              style: GoogleFonts.nunito(fontSize: 12),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ],
+              ),
+            );
+          }).toList(),
+        ],
+      ],
+    );
+  }
+}
+
+// ==================== PLANNER TAB ====================
+class _PlannerTab extends StatefulWidget {
+  const _PlannerTab();
+
+  @override
+  State<_PlannerTab> createState() => _PlannerTabState();
+}
+
+class _PlannerTabState extends State<_PlannerTab> {
+  final TextEditingController _goalController = TextEditingController();
+  final TextEditingController _hoursController = TextEditingController(
+    text: '2',
+  );
+  String? _studyPlan;
+  bool _isGenerating = false;
+
+  void _generatePlan() {
+    if (_goalController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a study goal')),
+      );
+      return;
+    }
+
+    setState(() => _isGenerating = true);
+
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      if (mounted) {
+        setState(() {
+          final hours = _hoursController.text;
+          _studyPlan =
+              '''📚 Study Plan for: ${_goalController.text}
+
+⏱️ Duration: $hours hour(s)
+
+Session 1 (0-50 min): Introduction & Key Concepts
+- Review fundamental concepts
+- Take notes on main ideas
+- Identify difficult areas
+
+Break (10 min): Rest & Refresh
+
+Session 2 (60-110 min): Deep Dive & Practice
+- Work through examples
+- Practice problems
+- Test understanding
+
+Break (5 min): Quick refresh
+
+Session 3 (115+ min): Review & Consolidation
+- Summarize key points
+- Create mind maps
+- Test recall memory
+
+💡 Tips:
+✓ Remove all distractions
+✓ Stay hydrated
+✓ Use active recall
+✓ Take meaningful notes''';
+          _isGenerating = false;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _goalController.dispose();
+    _hoursController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 8,
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.schedule_rounded,
+                    color: AppColors.amber,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
                   Text(
-                    _formatTime(message.timestamp),
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: isUser
-                          ? Colors.white.withOpacity(0.7)
-                          : AppColors.navy.withOpacity(0.5),
-                      fontSize: 11,
+                    'Study Plan Generator',
+                    style: GoogleFonts.dmSans(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.ink,
                     ),
                   ),
                 ],
               ),
+              const SizedBox(height: 12),
+              Text(
+                'Get a customized study schedule',
+                style: GoogleFonts.nunito(
+                  fontSize: 12,
+                  color: AppColors.navy.withValues(alpha: 0.6),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _goalController,
+                decoration: InputDecoration(
+                  labelText: 'Study Goal',
+                  hintText: 'What do you want to study?',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: _hoursController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Available Time (hours)',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              FilledButton(
+                onPressed: _generatePlan,
+                style: FilledButton.styleFrom(backgroundColor: AppColors.amber),
+                child: const SizedBox(
+                  width: double.infinity,
+                  child: Center(child: Text('Generate Plan')),
+                ),
+              ),
+            ],
+          ),
+        ),
+        if (_isGenerating) ...[
+          const SizedBox(height: 16),
+          Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.amber),
             ),
           ),
-          if (isUser) ...[
-            const SizedBox(width: 8),
-            Container(
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: AppColors.navy,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Icon(
-                Icons.person_rounded,
-                color: Colors.white,
-                size: 16,
-              ),
-            ),
-          ],
         ],
-      ),
+        if (_studyPlan != null) ...[
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.amber.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.amber.withValues(alpha: 0.3)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.done_all_rounded,
+                      color: AppColors.amber,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Your Study Plan',
+                      style: GoogleFonts.dmSans(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.amber,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  _studyPlan!,
+                  style: GoogleFonts.nunito(
+                    fontSize: 12,
+                    color: AppColors.ink,
+                    height: 1.6,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                FilledButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/focus');
+                  },
+                  style: FilledButton.styleFrom(
+                    backgroundColor: AppColors.electric,
+                  ),
+                  child: const SizedBox(
+                    width: double.infinity,
+                    child: Center(child: Text('Start Focus Session')),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ],
     );
-  }
-
-  String _formatTime(DateTime timestamp) {
-    final now = DateTime.now();
-    final difference = now.difference(timestamp);
-
-    if (difference.inMinutes < 1) {
-      return 'Just now';
-    } else if (difference.inHours < 1) {
-      return '${difference.inMinutes}m ago';
-    } else if (difference.inDays < 1) {
-      return '${difference.inHours}h ago';
-    } else {
-      return '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}';
-    }
   }
 }

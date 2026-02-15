@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../animations/page_transitions.dart';
 import '../../theme/app_theme.dart';
 import '../auth/login_screen.dart';
+import '../auth/register_screen.dart';
 
 const String _welcomeHeroAsset = 'assets/images/onboarding/welcome_hero.png';
 
@@ -16,31 +18,61 @@ class WelcomeScreen extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     // Responsive design tokens (8dp grid + clamping)
-    final padX = (screenWidth * 0.06).clamp(20.0, 28.0);
-    final padTopBottom = (screenHeight * 0.04).clamp(16.0, 24.0);
-    final spaceLogoBelow = (screenHeight * 0.04).clamp(24.0, 48.0);
-    final spaceIllustration = (screenHeight * 0.06).clamp(32.0, 56.0);
-    final spaceHeadline = (screenHeight * 0.03).clamp(16.0, 24.0);
-    final spaceToCTA = (screenHeight * 0.06).clamp(32.0, 64.0);
-    final btnHeight = (screenHeight * 0.065).clamp(48.0, 56.0);
-    final btnRadius = (screenWidth * 0.04).clamp(14.0, 18.0);
+    final padX = (screenWidth * 0.04).clamp(16.0, 24.0);
+    final padTopBottom = (screenHeight * 0.02).clamp(12.0, 16.0);
+    final spaceIllustration = (screenHeight * 0.03).clamp(16.0, 32.0);
+    final spaceHeadline = (screenHeight * 0.02).clamp(12.0, 20.0);
+    final btnHeight = (screenHeight * 0.055).clamp(42.0, 50.0);
+    final btnRadius = (screenWidth * 0.035).clamp(12.0, 16.0);
 
     // Typography sizes
-    final logoFontSize = (screenWidth * 0.07).clamp(26.0, 34.0);
-    final h1FontSize = (screenWidth * 0.062).clamp(24.0, 32.0);
-    final h2FontSize = (screenWidth * 0.048).clamp(18.0, 24.0);
-    final bodyFontSize = (screenWidth * 0.038).clamp(14.0, 16.0);
-    final btnFontSize = (screenWidth * 0.04).clamp(15.0, 17.0);
+    final h1FontSize = (screenWidth * 0.065).clamp(26.0, 36.0);
+    final bodyFontSize = (screenWidth * 0.038).clamp(13.0, 15.0);
+    final btnFontSize = (screenWidth * 0.038).clamp(14.0, 16.0);
 
-    // Illustration sizing
-    final illustrationWidth = screenWidth * 0.82;
-    final illustrationHeight = (screenHeight * 0.38).clamp(220.0, 320.0);
-    final illustrationRadius = (screenWidth * 0.06).clamp(20.0, 32.0);
+    // Illustration sizing - larger, more prominent
+    final illustrationWidth = screenWidth * 0.95;
+    final illustrationHeight = (screenHeight * 0.42).clamp(260.0, 380.0);
+    final illustrationRadius = (screenWidth * 0.08).clamp(24.0, 36.0);
 
     return Scaffold(
       body: Stack(
         children: [
           const _WelcomeBackground(),
+          // Decorative curve elements
+          Positioned(
+            right: -30,
+            top: 120,
+            child: CustomPaint(
+              size: const Size(120, 120),
+              painter: _CurvePainter(
+                color: const Color(0xFFFFD5B3),
+                rotation: 0,
+              ),
+            ),
+          ),
+          Positioned(
+            left: -20,
+            top: 280,
+            child: CustomPaint(
+              size: const Size(100, 100),
+              painter: _CurvePainter(
+                color: const Color(0xFF88D0E6),
+                rotation: 0.3,
+              ),
+            ),
+          ),
+          Positioned(
+            right: -40,
+            bottom: 220,
+            child: CustomPaint(
+              size: const Size(130, 100),
+              painter: _CurvePainter(
+                color: const Color(0xFFF5A8A8),
+                rotation: -0.2,
+              ),
+            ),
+          ),
           SafeArea(
             child: SingleChildScrollView(
               child: ConstrainedBox(
@@ -59,76 +91,68 @@ class WelcomeScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // A) Logo block
-                        Text(
-                          'NEROVA',
-                          style: GoogleFonts.nunito(
-                            fontSize: logoFontSize,
-                            fontWeight: FontWeight.w900,
-                            color: AppColors.ink,
-                            letterSpacing: 1.2,
-                          ),
-                        ),
-                        SizedBox(height: spaceLogoBelow),
+                        // A) Logo (skip for now, asset path issue)
+                        // SizedBox(height: spaceLogoBelow),
 
-                        // B) Illustration block (bounded)
-                        Center(
-                          child: SizedBox(
-                            width: illustrationWidth,
-                            height: illustrationHeight,
-                            child: _MascotHeroImage(
-                              assetPath: _welcomeHeroAsset,
-                              borderRadius: illustrationRadius,
-                            ),
+                        // B) Illustration block (full-width, prominent)
+                        SizedBox(
+                          width: illustrationWidth,
+                          height: illustrationHeight,
+                          child: _MascotHeroImage(
+                            assetPath: _welcomeHeroAsset,
+                            borderRadius: illustrationRadius,
                           ),
                         ),
                         SizedBox(height: spaceIllustration),
 
-                        // C) Headline block (two lines)
+                        // C) Headline block (prominent, larger with highlighted Learning)
                         Text.rich(
                           TextSpan(
                             children: [
                               TextSpan(
-                                text: 'Your ',
+                                text: "Let's Start\nYour ",
                                 style: GoogleFonts.nunito(
                                   fontSize: h1FontSize,
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.w800,
                                   color: AppColors.ink,
-                                  height: 1.2,
+                                  height: 1.15,
                                 ),
                               ),
                               WidgetSpan(
                                 alignment: PlaceholderAlignment.middle,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: h1FontSize * 0.4,
-                                    vertical: 4,
+                                baseline: TextBaseline.alphabetic,
+                                child: ClipPath(
+                                  clipper: _TrapeziumClipper(
+                                    rightInset: h1FontSize * 0.4,
                                   ),
-                                  margin: const EdgeInsets.only(right: 4),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.electric.withOpacity(0.15),
-                                    borderRadius: BorderRadius.circular(
-                                      h1FontSize * 0.5,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: h1FontSize * 0.35,
+                                      vertical: h1FontSize * 0.15,
                                     ),
-                                  ),
-                                  child: Text(
-                                    'study buddy',
-                                    style: GoogleFonts.nunito(
-                                      fontSize: h1FontSize,
-                                      fontWeight: FontWeight.w700,
-                                      color: AppColors.electric,
-                                      height: 1.2,
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 2,
+                                    ),
+                                    color: const Color(0xFF7C6FD5),
+                                    child: Text(
+                                      'Learning',
+                                      style: GoogleFonts.nunito(
+                                        fontSize: h1FontSize,
+                                        fontWeight: FontWeight.w800,
+                                        color: Colors.white,
+                                        height: 1.0,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                               TextSpan(
-                                text: '\nfor calmer, smarter days.',
+                                text: "\nAdventure",
                                 style: GoogleFonts.nunito(
-                                  fontSize: h2FontSize,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: h1FontSize,
+                                  fontWeight: FontWeight.w800,
                                   color: AppColors.ink,
-                                  height: 1.2,
+                                  height: 1.15,
                                 ),
                               ),
                             ],
@@ -138,25 +162,40 @@ class WelcomeScreen extends StatelessWidget {
 
                         // D) Subtext block
                         Text(
-                          'Plan your tasks. Learn with clarity. Stay focused. Take care of your mind—all in one place.',
+                          'Your study buddy for calmer, smarter days.',
                           style: GoogleFonts.nunito(
                             fontSize: bodyFontSize,
-                            height: 1.55,
-                            color: AppColors.navy.withOpacity(0.75),
+                            height: 1.5,
+                            color: AppColors.navy.withValues(alpha: 0.7),
                             fontWeight: FontWeight.w500,
                           ),
-                          maxLines: 6,
-                          overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height: spaceToCTA),
+                        const Spacer(),
 
-                        // E) CTA Buttons block (clean, two-button stack)
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
+                        // E) CTA Buttons block (horizontal with Sign up, Log in, and arrow)
+                        Row(
                           children: [
-                            // Primary button (Sign Up)
+                            // Sign up button
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pushReplacement(
+                                  AppPageTransitions.fadeScaleTransition(
+                                    builder: (_) => const RegisterScreen(),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                'Sign up',
+                                style: GoogleFonts.nunito(
+                                  fontSize: btnFontSize - 1,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.navy.withValues(alpha: 0.7),
+                                ),
+                              ),
+                            ),
+                            const Spacer(),
+                            // Log in button
                             SizedBox(
-                              width: double.infinity,
                               height: btnHeight,
                               child: FilledButton(
                                 style: FilledButton.styleFrom(
@@ -167,56 +206,23 @@ class WelcomeScreen extends StatelessWidget {
                                       btnRadius,
                                     ),
                                   ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                  ),
                                   elevation: 0,
                                 ),
                                 onPressed: () {
                                   Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
+                                    AppPageTransitions.fadeScaleTransition(
                                       builder: (_) => const LoginScreen(),
                                     ),
                                   );
                                 },
                                 child: Text(
-                                  'Sign Up',
+                                  'Log in',
                                   style: GoogleFonts.nunito(
                                     fontSize: btnFontSize,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            // Secondary button (Log In)
-                            SizedBox(
-                              width: double.infinity,
-                              height: btnHeight,
-                              child: OutlinedButton(
-                                style: OutlinedButton.styleFrom(
-                                  foregroundColor: AppColors.navy.withOpacity(
-                                    0.8,
-                                  ),
-                                  side: BorderSide(
-                                    color: AppColors.navy.withOpacity(0.2),
-                                    width: 1,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                      btnRadius,
-                                    ),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                      builder: (_) => const LoginScreen(),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  'Log In',
-                                  style: GoogleFonts.nunito(
-                                    fontSize: btnFontSize,
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.w700,
                                   ),
                                 ),
                               ),
@@ -332,39 +338,13 @@ class _AsymmetricPill extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: color.withOpacity(opacity),
+        color: color.withValues(alpha: opacity),
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(36),
           bottomLeft: Radius.circular(36),
           topRight: Radius.circular(14),
           bottomRight: Radius.circular(14),
         ),
-      ),
-    );
-  }
-}
-
-class _BookSlice extends StatelessWidget {
-  const _BookSlice({required this.color, this.width = 92});
-
-  final Color color;
-  final double width;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 20,
-      width: width,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
       ),
     );
   }
@@ -391,7 +371,7 @@ class _MascotHeroImage extends StatelessWidget {
           borderRadius: BorderRadius.circular(borderRadius),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.12),
+              color: Colors.black.withValues(alpha: 0.12),
               blurRadius: 24,
               offset: const Offset(0, 12),
               spreadRadius: 2,
@@ -403,7 +383,7 @@ class _MascotHeroImage extends StatelessWidget {
           child: Image.asset(
             assetPath,
             fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => Container(
+            errorBuilder: (context, error, stackTrace) => Container(
               color: const Color(0xFFFFF4F1),
               child: const Center(
                 child: Icon(
@@ -420,36 +400,65 @@ class _MascotHeroImage extends StatelessWidget {
   }
 }
 
-class _StarBadge extends StatelessWidget {
-  const _StarBadge({required this.text});
+class _TrapeziumClipper extends CustomClipper<Path> {
+  _TrapeziumClipper({required this.rightInset});
 
-  final String text;
+  final double rightInset;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 48,
-      height: 48,
-      decoration: BoxDecoration(
-        color: const Color(0xFFB9A7FF),
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 10,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Center(
-        child: Text(
-          text,
-          style: GoogleFonts.nunito(
-            fontWeight: FontWeight.w800,
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
+  Path getClip(Size size) {
+    final inset = rightInset.clamp(0, size.width * 0.6);
+    return Path()
+      ..moveTo(0, 0)
+      ..lineTo(size.width, 0)
+      ..lineTo(size.width - inset, size.height)
+      ..lineTo(0, size.height)
+      ..close();
   }
+
+  @override
+  bool shouldReclip(covariant _TrapeziumClipper oldClipper) {
+    return oldClipper.rightInset != rightInset;
+  }
+}
+
+class _CurvePainter extends CustomPainter {
+  final Color color;
+  final double rotation;
+
+  _CurvePainter({required this.color, this.rotation = 0});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+    canvas.save();
+    canvas.translate(size.width / 2, size.height / 2);
+    canvas.rotate(rotation);
+    canvas.translate(-size.width / 2, -size.height / 2);
+    final path = Path();
+    path.moveTo(0, size.height * 0.3);
+    path.quadraticBezierTo(
+      size.width * 0.3,
+      size.height * 0.1,
+      size.width * 0.6,
+      size.height * 0.4,
+    );
+    path.quadraticBezierTo(
+      size.width * 0.8,
+      size.height * 0.6,
+      size.width,
+      size.height * 0.5,
+    );
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    path.close();
+
+    canvas.drawPath(path, paint);
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

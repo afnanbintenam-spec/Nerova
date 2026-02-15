@@ -52,7 +52,7 @@ class StyledCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(isSmallScreen ? 20 : 26),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withValues(alpha: 0.06),
               blurRadius: 14,
               offset: const Offset(0, 6),
             ),
@@ -71,7 +71,7 @@ class StyledCard extends StatelessWidget {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.08),
+                        color: Colors.black.withValues(alpha: 0.08),
                         blurRadius: 8,
                         offset: const Offset(0, 4),
                       ),
@@ -82,7 +82,7 @@ class StyledCard extends StatelessWidget {
                       width: iconSize - 8,
                       height: iconSize - 8,
                       decoration: BoxDecoration(
-                        color: iconBackgroundColor.withOpacity(0.2),
+                        color: iconBackgroundColor.withValues(alpha: 0.2),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -137,7 +137,7 @@ class StyledCard extends StatelessWidget {
               style: GoogleFonts.nunito(
                 fontSize: isSmallScreen ? 12 : 13.5,
                 fontWeight: FontWeight.w600,
-                color: AppColors.navy.withOpacity(0.7),
+                color: AppColors.navy.withValues(alpha: 0.7),
                 height: 1.4,
               ),
             ),
@@ -151,7 +151,8 @@ class StyledCard extends StatelessWidget {
                     height: isSmallScreen ? 90 : 110,
                     width: double.infinity,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+                    errorBuilder: (context, error, stackTrace) =>
+                        const SizedBox.shrink(),
                   ),
                 ),
                 SizedBox(height: isSmallScreen ? 10 : 14),

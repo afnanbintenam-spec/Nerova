@@ -87,7 +87,7 @@ class _MoodEntryDialogState extends ConsumerState<MoodEntryDialog> {
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: AppColors.mint.withOpacity(0.1),
+                      color: AppColors.mint.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(
@@ -143,7 +143,7 @@ class _MoodEntryDialogState extends ConsumerState<MoodEntryDialog> {
                       decoration: BoxDecoration(
                         color: isSelected
                             ? (option['color'] as Color)
-                            : (option['color'] as Color).withOpacity(0.1),
+                            : (option['color'] as Color).withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           color: isSelected
@@ -229,7 +229,7 @@ class _MoodEntryDialogState extends ConsumerState<MoodEntryDialog> {
                         }
                       });
                     },
-                    selectedColor: AppColors.electric.withOpacity(0.2),
+                    selectedColor: AppColors.electric.withValues(alpha: 0.2),
                     checkmarkColor: AppColors.electric,
                     labelStyle: GoogleFonts.dmSans(
                       fontSize: 13,

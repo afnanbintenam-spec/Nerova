@@ -67,17 +67,17 @@ class ModernInputField extends StatelessWidget {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    Colors.white.withOpacity(0.35),
-                    Colors.white.withOpacity(0.15),
+                    Colors.white.withValues(alpha: 0.35),
+                    Colors.white.withValues(alpha: 0.15),
                   ],
                 ),
                 border: Border.all(
-                  color: AppColors.electric.withOpacity(0.2),
+                  color: AppColors.electric.withValues(alpha: 0.2),
                   width: 1.5,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: AppColors.electric.withOpacity(0.08),
+                    color: AppColors.electric.withValues(alpha: 0.08),
                     blurRadius: 20,
                     offset: const Offset(0, 8),
                   ),
@@ -101,11 +101,11 @@ class ModernInputField extends StatelessWidget {
                   hintStyle: GoogleFonts.nunito(
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
-                    color: AppColors.navy.withOpacity(0.45),
+                    color: AppColors.navy.withValues(alpha: 0.45),
                   ),
                   prefixIcon: Icon(
                     prefixIcon,
-                    color: AppColors.electric.withOpacity(0.7),
+                    color: AppColors.electric.withValues(alpha: 0.7),
                     size: 22,
                   ),
                   suffixIcon: suffixIcon,
@@ -155,15 +155,15 @@ class ModernInputField extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [AppColors.mist, AppColors.mist.withOpacity(0.5)],
+              colors: [AppColors.mist, AppColors.mist.withValues(alpha: 0.5)],
             ),
             border: Border.all(
-              color: AppColors.electric.withOpacity(0.15),
+              color: AppColors.electric.withValues(alpha: 0.15),
               width: 1.5,
             ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.electric.withOpacity(0.05),
+                color: AppColors.electric.withValues(alpha: 0.05),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -187,11 +187,11 @@ class ModernInputField extends StatelessWidget {
               hintStyle: GoogleFonts.nunito(
                 fontWeight: FontWeight.w600,
                 fontSize: 14,
-                color: AppColors.navy.withOpacity(0.45),
+                color: AppColors.navy.withValues(alpha: 0.45),
               ),
               prefixIcon: Icon(
                 prefixIcon,
-                color: AppColors.navy.withOpacity(0.6),
+                color: AppColors.navy.withValues(alpha: 0.6),
                 size: 20,
               ),
               suffixIcon: suffixIcon,

@@ -159,7 +159,7 @@ class _FocusScreenState extends State<FocusScreen> {
                 borderRadius: BorderRadius.circular(24),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.06),
+                    color: Colors.black.withValues(alpha: 0.06),
                     blurRadius: 18,
                     offset: const Offset(0, 8),
                   ),
@@ -218,8 +218,8 @@ class _FocusScreenState extends State<FocusScreen> {
                               ),
                               decoration: BoxDecoration(
                                 color: _isWorkSession
-                                    ? AppColors.electric.withOpacity(0.1)
-                                    : AppColors.amber.withOpacity(0.1),
+                                    ? AppColors.electric.withValues(alpha: 0.1)
+                                    : AppColors.amber.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
@@ -246,7 +246,7 @@ class _FocusScreenState extends State<FocusScreen> {
                     style: GoogleFonts.dmSans(
                       fontSize: isSmallScreen ? 14 : 15,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.navy.withOpacity(0.8),
+                      color: AppColors.navy.withValues(alpha: 0.8),
                     ),
                   ),
                   SizedBox(height: isSmallScreen ? 16 : 20),
@@ -404,7 +404,7 @@ class _StatRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -415,7 +415,7 @@ class _StatRow extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(icon, size: 20, color: color),
@@ -427,7 +427,7 @@ class _StatRow extends StatelessWidget {
               style: GoogleFonts.dmSans(
                 fontSize: isSmallScreen ? 14 : 15,
                 fontWeight: FontWeight.w600,
-                color: AppColors.navy.withOpacity(0.8),
+                color: AppColors.navy.withValues(alpha: 0.8),
               ),
             ),
           ),

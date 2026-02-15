@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/task.dart';
 import '../providers/auth_provider.dart';
+import '../screens/splash/splash_screen.dart';
 import '../screens/onboarding/welcome_screen.dart';
 import '../screens/auth/login_screen.dart';
 import '../screens/auth/register_screen.dart';
 import '../screens/shell/main_shell.dart';
+import '../screens/exams/exam_hub_screen.dart';
+import '../screens/courses/courses_screen.dart';
+import '../screens/vault/knowledge_vault_screen.dart';
+import '../screens/stress_support/stress_support_screen.dart';
+import '../screens/task_details/task_detail_screen.dart';
+import '../screens/insights/analytics_screen.dart';
 
 class AppRoutes {
+  static const String splash = '/splash';
   static const String welcome = '/';
   static const String login = '/login';
   static const String register = '/register';
@@ -16,7 +25,13 @@ class AppRoutes {
   static const String ai = '/ai';
   static const String focus = '/focus';
   static const String insights = '/insights';
+  static const String analytics = '/analytics';
   static const String shell = '/shell';
+  static const String exams = '/exams';
+  static const String courses = '/courses';
+  static const String vault = '/vault';
+  static const String stressSupport = '/stress-support';
+  static const String taskDetails = '/task-details';
 }
 
 class AppRouter {
@@ -29,6 +44,11 @@ class AppRouter {
 
     // Check if user is authenticated
     final isAuthenticated = authState.isAuthenticated;
+
+    // Splash screen (always shown first)
+    if (settings.name == null || settings.name == AppRoutes.splash) {
+      return _buildRoute(const SplashScreen(), settings);
+    }
 
     // Public routes (no auth required)
     switch (settings.name) {
@@ -72,6 +92,29 @@ class AppRouter {
 
       case AppRoutes.insights:
         return _buildRoute(const MainShell(initialIndex: 4), settings);
+
+      case AppRoutes.exams:
+        return _buildRoute(const ExamHubScreen(), settings);
+
+      case AppRoutes.courses:
+        return _buildRoute(const CoursesScreen(), settings);
+
+      case AppRoutes.vault:
+        return _buildRoute(const KnowledgeVaultScreen(), settings);
+
+      case AppRoutes.stressSupport:
+        return _buildRoute(const StressSupportScreen(), settings);
+
+      case AppRoutes.analytics:
+        return _buildRoute(const AnalyticsScreen(), settings);
+
+      case AppRoutes.taskDetails:
+        // Extract task from arguments
+        final task = settings.arguments as Task?;
+        if (task != null) {
+          return _buildRoute(TaskDetailScreen(task: task), settings);
+        }
+        return _buildRoute(const _NotFoundScreen(), settings);
 
       default:
         return _buildRoute(const _NotFoundScreen(), settings);

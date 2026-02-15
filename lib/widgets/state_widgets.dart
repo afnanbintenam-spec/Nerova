@@ -27,7 +27,7 @@ class ErrorState extends StatelessWidget {
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: AppColors.rose.withOpacity(0.1),
+                color: AppColors.rose.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Icon(
@@ -49,7 +49,7 @@ class ErrorState extends StatelessWidget {
             Text(
               message ?? 'We encountered an error. Please try again.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.navy.withOpacity(0.6),
+                color: AppColors.navy.withValues(alpha: 0.6),
               ),
               textAlign: TextAlign.center,
             ),
@@ -109,8 +109,8 @@ class EmptyState extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    AppColors.electric.withOpacity(0.1),
-                    AppColors.mint.withOpacity(0.1),
+                    AppColors.electric.withValues(alpha: 0.1),
+                    AppColors.mint.withValues(alpha: 0.1),
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -136,7 +136,7 @@ class EmptyState extends StatelessWidget {
             Text(
               message ?? 'Start by adding your first item.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.navy.withOpacity(0.6),
+                color: AppColors.navy.withValues(alpha: 0.6),
               ),
               textAlign: TextAlign.center,
             ),
@@ -191,10 +191,10 @@ class OfflineBanner extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: AppColors.amber.withOpacity(0.9),
+        color: AppColors.amber.withValues(alpha: 0.9),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -232,7 +232,7 @@ class SyncIndicator extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: AppColors.amber.withOpacity(0.1),
+        color: AppColors.amber.withValues(alpha: 0.1),
         border: Border.all(color: AppColors.amber),
         borderRadius: BorderRadius.circular(12),
       ),
