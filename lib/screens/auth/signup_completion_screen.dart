@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../routes/app_router.dart';
 import '../../theme/app_theme.dart';
-import '../shell/main_shell.dart';
 
 class SignupCompletionScreen extends StatefulWidget {
   const SignupCompletionScreen({super.key});
@@ -37,10 +37,7 @@ class _SignupCompletionScreenState extends State<SignupCompletionScreen>
     // Navigate to home after 3 seconds
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const MainShell()),
-          (route) => false,
-        );
+        Navigator.of(context).pushReplacementNamed(AppRoutes.welcome);
       }
     });
   }

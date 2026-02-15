@@ -126,37 +126,15 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     final isSmallScreen = screenWidth < 600;
 
     return Scaffold(
-      backgroundColor: AppColors.mist,
+      backgroundColor: const Color(0xFFF8F9FB),
       body: Stack(
         children: [
-          // Background decorations
-          Positioned(
-            top: -100,
-            right: -80,
-            child: Container(
-              width: 280,
-              height: 280,
-              decoration: BoxDecoration(
-                color: AppColors.mint.withValues(alpha: 0.05),
-                shape: BoxShape.circle,
-              ),
-            ),
-          ),
+          // Back button
           Positioned(
             top: 16,
             left: 16,
-            child: SafeArea(child: ModernBackButton(iconColor: AppColors.mint)),
-          ),
-          Positioned(
-            bottom: -120,
-            left: -60,
-            child: Container(
-              width: 240,
-              height: 240,
-              decoration: BoxDecoration(
-                color: AppColors.electric.withValues(alpha: 0.05),
-                shape: BoxShape.circle,
-              ),
+            child: SafeArea(
+              child: ModernBackButton(iconColor: AppColors.electric),
             ),
           ),
 
@@ -176,35 +154,35 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     // Title
                     Text(
                       'Create Account',
-                      style: GoogleFonts.nunito(
-                        fontSize: isSmallScreen ? 28 : 32,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.ink,
+                      style: GoogleFonts.inter(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.rose,
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
                     Text(
                       'Join us on your learning journey',
-                      style: GoogleFonts.nunito(
-                        fontSize: isSmallScreen ? 13 : 14,
-                        fontWeight: FontWeight.w600,
+                      style: GoogleFonts.inter(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
                         color: AppColors.navy.withValues(alpha: 0.6),
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: isSmallScreen ? 28 : 32),
+                    const SizedBox(height: 48),
 
-                    // Form Container
+                    // Form Container - White card with soft shadow
                     Container(
-                      padding: EdgeInsets.all(isSmallScreen ? 24 : 32),
+                      padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(24),
+                        borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(alpha: 0.06),
-                            blurRadius: 20,
+                            blurRadius: 30,
                             offset: const Offset(0, 8),
                           ),
                         ],
@@ -231,7 +209,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 24),
 
                             // Age and Gender Row
                             Row(
@@ -266,47 +244,53 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                     children: [
                                       Text(
                                         'Gender',
-                                        style: GoogleFonts.nunito(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700,
+                                        style: GoogleFonts.inter(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
                                           color: AppColors.navy,
                                         ),
                                       ),
                                       const SizedBox(height: 8),
                                       Container(
+                                        height: 52,
                                         padding: const EdgeInsets.symmetric(
-                                          horizontal: 12,
+                                          horizontal: 16,
                                         ),
                                         decoration: BoxDecoration(
-                                          color: const Color(
-                                            0xFFE8E6FF,
-                                          ).withValues(alpha: 0.5),
+                                          color: const Color(0xFFF3F4F6),
                                           borderRadius: BorderRadius.circular(
-                                            14,
+                                            16,
                                           ),
                                           border: Border.all(
-                                            color: AppColors.line.withValues(alpha: 
-                                              0.2,
-                                            ),
+                                            color: Colors.transparent,
                                           ),
                                         ),
                                         child: DropdownButton<String>(
                                           value: _selectedGender,
                                           hint: Text(
                                             'Select',
-                                            style: GoogleFonts.nunito(
-                                              fontWeight: FontWeight.w500,
+                                            style: GoogleFonts.inter(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w400,
                                             ),
                                           ),
                                           isExpanded: true,
                                           underline: const SizedBox.shrink(),
+                                          icon: Icon(
+                                            Icons.expand_more,
+                                            color: AppColors.navy.withValues(
+                                              alpha: 0.6,
+                                            ),
+                                            size: 20,
+                                          ),
                                           items: genders.map((gender) {
                                             return DropdownMenuItem(
                                               value: gender,
                                               child: Text(
                                                 gender,
-                                                style: GoogleFonts.nunito(
-                                                  fontWeight: FontWeight.w600,
+                                                style: GoogleFonts.inter(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w400,
                                                 ),
                                               ),
                                             );
@@ -323,7 +307,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 24),
 
                             // Education Level
                             Column(
@@ -331,43 +315,51 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                               children: [
                                 Text(
                                   'Education Level',
-                                  style: GoogleFonts.nunito(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w700,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
                                     color: AppColors.navy,
                                   ),
                                 ),
                                 const SizedBox(height: 8),
                                 Container(
+                                  height: 52,
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
+                                    horizontal: 16,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: const Color(
-                                      0xFFE8E6FF,
-                                    ).withValues(alpha: 0.5),
-                                    borderRadius: BorderRadius.circular(14),
+                                    color: const Color(0xFFF3F4F6),
+                                    borderRadius: BorderRadius.circular(16),
                                     border: Border.all(
-                                      color: AppColors.line.withValues(alpha: 0.2),
+                                      color: Colors.transparent,
                                     ),
                                   ),
                                   child: DropdownButton<String>(
                                     value: _selectedEducation,
                                     hint: Text(
                                       'Select your level',
-                                      style: GoogleFonts.nunito(
-                                        fontWeight: FontWeight.w500,
+                                      style: GoogleFonts.inter(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w400,
                                       ),
                                     ),
                                     isExpanded: true,
                                     underline: const SizedBox.shrink(),
+                                    icon: Icon(
+                                      Icons.expand_more,
+                                      color: AppColors.navy.withValues(
+                                        alpha: 0.6,
+                                      ),
+                                      size: 20,
+                                    ),
                                     items: educationLevels.map((level) {
                                       return DropdownMenuItem(
                                         value: level,
                                         child: Text(
                                           level,
-                                          style: GoogleFonts.nunito(
-                                            fontWeight: FontWeight.w600,
+                                          style: GoogleFonts.inter(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w400,
                                           ),
                                         ),
                                       );
@@ -381,7 +373,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 24),
 
                             // Grade/Year and Subject Row
                             Row(
@@ -394,49 +386,53 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                     children: [
                                       Text(
                                         'Grade/Year',
-                                        style: GoogleFonts.nunito(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700,
+                                        style: GoogleFonts.inter(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
                                           color: AppColors.navy,
                                         ),
                                       ),
                                       const SizedBox(height: 8),
                                       Container(
+                                        height: 52,
                                         padding: const EdgeInsets.symmetric(
-                                          horizontal: 8,
+                                          horizontal: 16,
                                         ),
                                         decoration: BoxDecoration(
-                                          color: const Color(
-                                            0xFFE8E6FF,
-                                          ).withValues(alpha: 0.5),
+                                          color: const Color(0xFFF3F4F6),
                                           borderRadius: BorderRadius.circular(
-                                            14,
+                                            16,
                                           ),
                                           border: Border.all(
-                                            color: AppColors.line.withValues(alpha: 
-                                              0.2,
-                                            ),
+                                            color: Colors.transparent,
                                           ),
                                         ),
                                         child: DropdownButton<String>(
                                           value: _selectedGrade,
                                           hint: Text(
                                             'Select',
-                                            style: GoogleFonts.nunito(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w500,
+                                            style: GoogleFonts.inter(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w400,
                                             ),
                                           ),
                                           isExpanded: true,
                                           underline: const SizedBox.shrink(),
+                                          icon: Icon(
+                                            Icons.expand_more,
+                                            color: AppColors.navy.withValues(
+                                              alpha: 0.6,
+                                            ),
+                                            size: 20,
+                                          ),
                                           items: grades.map((grade) {
                                             return DropdownMenuItem(
                                               value: grade,
                                               child: Text(
                                                 grade,
-                                                style: GoogleFonts.nunito(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w600,
+                                                style: GoogleFonts.inter(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w400,
                                                 ),
                                               ),
                                             );
@@ -460,49 +456,53 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                     children: [
                                       Text(
                                         'Subject',
-                                        style: GoogleFonts.nunito(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w700,
+                                        style: GoogleFonts.inter(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
                                           color: AppColors.navy,
                                         ),
                                       ),
                                       const SizedBox(height: 8),
                                       Container(
+                                        height: 52,
                                         padding: const EdgeInsets.symmetric(
-                                          horizontal: 8,
+                                          horizontal: 16,
                                         ),
                                         decoration: BoxDecoration(
-                                          color: const Color(
-                                            0xFFE8E6FF,
-                                          ).withValues(alpha: 0.5),
+                                          color: const Color(0xFFF3F4F6),
                                           borderRadius: BorderRadius.circular(
-                                            14,
+                                            16,
                                           ),
                                           border: Border.all(
-                                            color: AppColors.line.withValues(alpha: 
-                                              0.2,
-                                            ),
+                                            color: Colors.transparent,
                                           ),
                                         ),
                                         child: DropdownButton<String>(
                                           value: _selectedSubject,
                                           hint: Text(
                                             'Select',
-                                            style: GoogleFonts.nunito(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w500,
+                                            style: GoogleFonts.inter(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w400,
                                             ),
                                           ),
                                           isExpanded: true,
                                           underline: const SizedBox.shrink(),
+                                          icon: Icon(
+                                            Icons.expand_more,
+                                            color: AppColors.navy.withValues(
+                                              alpha: 0.6,
+                                            ),
+                                            size: 20,
+                                          ),
                                           items: subjects.map((subject) {
                                             return DropdownMenuItem(
                                               value: subject,
                                               child: Text(
                                                 subject,
-                                                style: GoogleFonts.nunito(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w600,
+                                                style: GoogleFonts.inter(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w400,
                                                 ),
                                               ),
                                             );
@@ -519,7 +519,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 24),
 
                             // School/College Name
                             ModernInputField(
@@ -535,7 +535,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 24),
 
                             // Email
                             ModernInputField(
@@ -555,7 +555,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 24),
 
                             // Password
                             ModernInputField(
@@ -588,7 +588,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 24),
 
                             // Confirm Password
                             ModernInputField(
@@ -625,14 +625,16 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
                             // Error message
                             if (authState.error != null) ...[
-                              const SizedBox(height: 16),
+                              const SizedBox(height: 24),
                               Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
                                   color: AppColors.rose.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
-                                    color: AppColors.rose.withValues(alpha: 0.3),
+                                    color: AppColors.rose.withValues(
+                                      alpha: 0.3,
+                                    ),
                                   ),
                                 ),
                                 child: Row(
@@ -657,19 +659,22 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                 ),
                               ),
                             ],
-                            const SizedBox(height: 20),
+                            const SizedBox(height: 32),
 
-                            // Sign up button
+                            // Sign up button - Premium style
                             SizedBox(
-                              height: 54,
+                              height: 56,
                               child: FilledButton(
                                 style: FilledButton.styleFrom(
-                                  backgroundColor: AppColors.mint,
+                                  backgroundColor: AppColors.rose,
                                   foregroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16),
+                                    borderRadius: BorderRadius.circular(18),
                                   ),
-                                  elevation: 0,
+                                  elevation: 2,
+                                  shadowColor: AppColors.rose.withValues(
+                                    alpha: 0.3,
+                                  ),
                                 ),
                                 onPressed: authState.isLoading
                                     ? null
@@ -688,9 +693,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                                       )
                                     : Text(
                                         'Create Account',
-                                        style: GoogleFonts.nunito(
+                                        style: GoogleFonts.inter(
                                           fontSize: 16,
-                                          fontWeight: FontWeight.w800,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
                               ),
@@ -699,7 +704,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 32),
 
                     // Login link
                     Row(
@@ -707,9 +712,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                       children: [
                         Text(
                           "Already have an account? ",
-                          style: GoogleFonts.nunito(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
+                          style: GoogleFonts.inter(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
                             color: AppColors.navy.withValues(alpha: 0.7),
                           ),
                         ),
@@ -724,10 +729,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           ),
                           child: Text(
                             'Sign In',
-                            style: GoogleFonts.nunito(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.mint,
+                            style: GoogleFonts.inter(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.rose,
                             ),
                           ),
                         ),

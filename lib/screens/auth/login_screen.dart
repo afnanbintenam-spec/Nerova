@@ -3,13 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../providers/auth_provider.dart';
+import '../../routes/app_router.dart';
 import '../../theme/app_theme.dart';
 import '../../widgets/modern_back_button.dart';
 import '../../widgets/modern_input_field.dart';
-import '../shell/main_shell.dart';
 import 'register_screen.dart';
 
-const String _loginIconAsset = 'assets/images/onboarding/login page icon.jpg';
+const String _loginIconAsset = 'assets/images/onboarding/login_page_icon.jpg';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -38,9 +38,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           .login(_emailController.text.trim(), _passwordController.text);
 
       if (success && mounted) {
-        Navigator.of(
-          context,
-        ).pushReplacement(MaterialPageRoute(builder: (_) => const MainShell()));
+        Navigator.of(context).pushReplacementNamed(AppRoutes.welcome);
       }
     }
   }
@@ -284,7 +282,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   color: AppColors.rose.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
-                                    color: AppColors.rose.withValues(alpha: 0.3),
+                                    color: AppColors.rose.withValues(
+                                      alpha: 0.3,
+                                    ),
                                   ),
                                 ),
                                 child: Row(
